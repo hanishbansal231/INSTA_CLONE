@@ -1,4 +1,4 @@
-import express, { urlencoded } from 'express';
+import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import morgan from 'morgan';
@@ -10,14 +10,15 @@ const app = express();
 app.use(cookieParser());
 app.use(express.json({ limit: '16kb' }));
 app.use(express.static('public'));
-app.use(urlencoded({ limit: '16kb', extended: true }));
 app.use(cors({
-    origin: '*',
+    origin: '*', // Replace with specific trusted origins
 }));
-app.use(morgan('dev'));
+app.use(morgan('combined')); // Adjust for production logging
 
 const httpServer = createServer(app);
-const io = new Server(httpServer);
+const io = new Server(httpServer, {
+    serveClient: true,
+});
 
 io.on('connection', (socket) => {
     console.log(`Socket Connected -> ${socket.id}`);

@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="/node_modules/socket.io-client/dist/socket.io.js"></script>
+
 </head>
 
 <body>
@@ -13,8 +14,12 @@
 
     <script>
         console.log('Client script is running');
-        const socket = io('http://localhost:5000', { transports: ['websocket'] });
-        console.log('Socket object:', socket);
+        const socket = io('http://localhost:5001');
+        
+        socket.on('connect', () => {
+            console.log('Connected to server');
+        });
+    
     </script>
 </body>
 
