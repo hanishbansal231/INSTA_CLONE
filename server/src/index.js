@@ -1,6 +1,7 @@
-import httpServer from './app.js';
+import app from './app.js';
 import dbConnection from './config/db.Connection.js';
 import { config } from 'dotenv';
+import { Server } from 'socket.io';
 
 config({
     path: './env'
@@ -10,11 +11,22 @@ const PORT = process.env.PORT || 5001;
 
 dbConnection()
     .then(() => {
-        httpServer.listen(PORT, () => {
+        const server = app.listen(PORT, () => {
             console.log(`Server is running at port: http://localhost:${PORT}/`);
+        });
+        const io = new Server(server, {
+            serveClient: true,
+        });
+
+        io.on('connection', (socket) => {
+            try {
+                console.log(`Socket Connected -> ${socket.id}`);
+            } catch (error) {
+                console.error(`Socket Connection Error -> ${error.message}`);
+            }
         });
     })
     .catch((error) => {
         console.log('MONGODB CONNECTION FAILED -> ', error);
         process.exit(1);
-    })
+    });
