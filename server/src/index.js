@@ -19,11 +19,11 @@ dbConnection()
         });
 
         io.on('connection', (socket) => {
-            try {
-                console.log(`Socket Connected -> ${socket.id}`);
-            } catch (error) {
-                console.error(`Socket Connection Error -> ${error.message}`);
-            }
+            console.log(`Socket Connected -> ${socket.id}`);
+        });
+        
+        io.on('error', (error) => {
+            console.error(`Socket Connection Error -> ${error.message}`);
         });
     })
     .catch((error) => {
