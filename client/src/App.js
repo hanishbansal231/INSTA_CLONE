@@ -1,7 +1,11 @@
 
+import Home from "./pages/Home";
+
 function App() {
   return (
-   <div className="text-primary-10 text-5xl">Hello</div>
+    <>
+      <Home />
+    </>
   );
 }
 
