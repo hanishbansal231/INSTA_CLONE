@@ -1,24 +1,32 @@
 import React from 'react'
+import { FaRegComment, FaRegHeart } from "react-icons/fa";
+import { RiShareCircleFill } from "react-icons/ri";
 
 export default function Post() {
     return (
         <div className='Post flex flex-col p-2  bg-white rounded gap-2'>
-            <img className='w-[100%] max-h-[20rem] object-cover rounded' src="https://sb.kaleidousercontent.com/67418/1920x1545/c5f15ac173/samuel-raita-ridxdghg7pw-unsplash.jpg" alt="" />
-            {/* <div className='postReact flex items-center gap-2'>
-                <img className='w-[100%] max-h-[20rem] object-cover rounded' src="https://www.pngall.com/wp-content/uploads/5/Like-Button-PNG-Pic.png" alt="" />
-                <img className='w-[100%] max-h-[20rem] object-cover rounded' src="https://cdn.pixabay.com/photo/2017/04/11/22/25/balloon-2223048_640.png" alt="" />
-                <img className='w-[100%] max-h-[20rem] object-cover rounded' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3Hbj6QYzuXDbg4sNuLqm74r7TNoFDVlH0ug&usqp=CAU" alt="" />
+            <div className='flex items-center gap-3 px-2'>
+                <img className='w-[30px] h-[30px] rounded-full' src="https://sb.kaleidousercontent.com/67418/1920x1545/c5f15ac173/samuel-raita-ridxdghg7pw-unsplash.jpg" alt="" />
+                <h4>Elon Musk</h4>
             </div>
-            <span>
-                likes
-            </span>
-            <div className='detail'>
-                <span>
-
-                    <b>Name</b>
-                </span>
-                <span>description</span>
-            </div> */}
+            <div className='px-2 text-sm'>
+                <p>Life is too short to be boring 🌟</p>
+            </div>
+            <img className='w-[100%] max-h-[20rem] object-cover ' src="https://sb.kaleidousercontent.com/67418/1920x1545/c5f15ac173/samuel-raita-ridxdghg7pw-unsplash.jpg" alt="" />
+            <div className='flex items-center gap-4 text-2xl px-2 cursor-pointer'>
+                <button><FaRegHeart /></button>
+                <button><FaRegComment /></button>
+                <button><RiShareCircleFill /></button>
+            </div>
+            <div className='px-2 flex flex-col cursor-pointer'>
+                <span className='text-sm font-medium'>13331 likes</span>
+                <span>View all 549 comments</span>
+                {/* <div className='flex flex-col'>
+                    <span>nick</span>
+                    <span>super</span>
+                    <span>View all 549 comments</span>
+                </div> */}
+            </div>
         </div>
     )
 }
