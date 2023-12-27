@@ -1,6 +1,6 @@
 import mongoose, { Schema, model } from "mongoose";
 
-const postImageSchema = new Schema({
+const postReelSchema = new Schema({
     user: {
         type: mongoose.Types.ObjectId,
         ref: "Users",
@@ -12,7 +12,7 @@ const postImageSchema = new Schema({
     tag: {
         type: String
     },
-    image: {
+    reel: {
         public_id: {
             type: String,
             required: true
@@ -25,5 +25,5 @@ const postImageSchema = new Schema({
 }, { timestamps: true }
 );
 
-const postImageModel = model("PostImages", postImageSchema);
-export default postImageModel;
+const postReelModel = model("PostReels", postReelSchema);
+export default postReelModel;
