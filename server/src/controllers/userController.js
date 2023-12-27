@@ -1,7 +1,7 @@
-import usersModel from "../models/userModel";
-import apiError from "../utils/apiError";
-import asyncHandler from "../utils/asyncHandler";
-import otpModel from '../models/otpModel';
+import usersModel from "../models/userModel.js";
+import apiError from "../utils/apiError.js";
+import asyncHandler from "../utils/asyncHandler.js";
+import otpModel from '../models/otpModel.js';
 import otpGenerator from 'otp-generator';
 
 export const sendOtp = asyncHandler(async (req, res, next) => {
@@ -306,8 +306,26 @@ export const changePassword = asyncHandler(async (req, res, next) => {
     }
 });
 
-export const forgotPassword = asyncHandler(async (req, res, next) => {
+export const forgotPasswordToken = asyncHandler(async (req, res, next) => {
     try {
+        const { email, userName } = req.body;
+
+        if (!email || !userName) {
+            return next(new apiError(400, "Please fill all information"))
+        }
+
+        const user = await usersModel.findOne({
+            $or: [{ email, userName }]
+        });
+
+        if(!user){
+            return next(new apiError(403,'User is not found Please try to register this account'))
+        }
+
+        const randomUrl = await user.generateForgotPasswordToken();
+
+        console.log(randomUrl);
+
 
     } catch (error) {
         console.log(error);

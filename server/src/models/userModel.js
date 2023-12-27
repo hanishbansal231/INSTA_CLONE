@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 
 const userSchema = new Schema({
     firstName: {
@@ -65,7 +66,9 @@ const userSchema = new Schema({
         type: String,
         enum: ["USER", "ADMIN"],
         default: "USER"
-    }
+    },
+    forgotPasswordToken: String,
+    forgotPasswordExpiry: Date,
 
 },
     { timestamps: true }
@@ -109,6 +112,22 @@ userSchema.methods.generateAccessToken = function () {
                 expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
             }
         )
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+userSchema.methods.generateForgotPasswordToken = function () {
+    try {
+        const randomUrl = crypto.randomBytes(20).toString('hex');
+
+        this.forgotPasswordToken = crypto
+            .createHash('sha255')
+            .update(randomUrl)
+            .digest('hex');
+
+        this.forgotPasswordExpiry = Date.now() + 15 * 60 * 1000;
+        
     } catch (error) {
         console.log(error);
     }
