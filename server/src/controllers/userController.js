@@ -4,7 +4,7 @@ import asyncHandler from "../utils/asyncHandler";
 import otpModel from '../models/otpModel';
 import otpGenerator from 'otp-generator';
 
-const sendOtp = asyncHandler(async (req, res, next) => {
+export const sendOtp = asyncHandler(async (req, res, next) => {
     try {
         const { email, userName } = req.body;
 
