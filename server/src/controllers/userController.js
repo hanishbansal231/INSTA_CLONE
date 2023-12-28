@@ -3,10 +3,13 @@ import apiError from "../utils/apiError.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import otpModel from '../models/otpModel.js';
 import otpGenerator from 'otp-generator';
+import sendEmail from "../utils/sendEmail.js";
+import apiResponse from "../utils/apiResponse.js";
 
 export const sendOtp = asyncHandler(async (req, res, next) => {
     try {
         const { email, userName } = req.body;
+        console.log(req.body);
 
         if (!email || !userName) {
             return next(new apiError(400, "Please fill all information"))
@@ -111,6 +114,8 @@ export const login = asyncHandler(async (req, res, next) => {
             return next(new apiError(403, 'User not exists,Please register this account...'));
         }
 
+        // console.log(await user.comparePassword(password));
+
         if (!(await user.comparePassword(password))) {
             return next(new apiError(403, 'user password is incorrect... please fill again'));
         }
@@ -155,7 +160,7 @@ export const getAllUser = asyncHandler(async (req, res, next) => {
 
 export const singleUser = asyncHandler(async (req, res, next) => {
     try {
-        const { id } = req.params;
+        const { id } = req.user;
 
         const user = await usersModel.findById({ _id: id });
 
@@ -318,13 +323,28 @@ export const forgotPasswordToken = asyncHandler(async (req, res, next) => {
             $or: [{ email, userName }]
         });
 
-        if(!user){
-            return next(new apiError(403,'User is not found Please try to register this account'))
+        if (!user) {
+            return next(new apiError(403, 'User is not found Please try to register this account'))
         }
 
         const randomUrl = await user.generateForgotPasswordToken();
 
-        console.log(randomUrl);
+        const url = `http://localhost:3000/forgot-password/${randomUrl}`
+
+        try {
+            const res = sendEmail(user.email, 'Send Forgot password link', url);
+
+            return res.status(201).json(
+                new apiResponse(200, {}, 'Email send succcessfully...')
+            )
+
+        } catch (error) {
+            console.log(error);
+            user.forgotPasswordExpiry = undefined
+            user.forgotPasswordToken = undefined
+            await user.save();
+            return next(new apiError(500, 'Email send failed...'))
+        }
 
 
     } catch (error) {

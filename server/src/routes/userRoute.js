@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { changePassword, deleteAccount, forgotPasswordToken, getAllUser, login, logout, profileUpdate, registerUser, sendOtp, singleUser, userSearch } from '../controllers/userController.js';
+import { isLoggedIn } from '../middlewares/auth.middleware.js';
 
 const router = Router();
 
@@ -10,16 +11,16 @@ router.route('/login').post(login);
 router.route('/forgot-password-token').post(forgotPasswordToken);
 
 // - Put
-router.route('/update').put(profileUpdate);
-router.route('/change-password').put(changePassword);
+router.route('/update').put(isLoggedIn, profileUpdate);
+router.route('/change-password').put(isLoggedIn, changePassword);
 
 // - Get
-router.route('/all-user').get(getAllUser);
-router.route('/single-user').get(singleUser);
-router.route('/logout').get(logout);
-router.route('/search').get(userSearch);
+router.route('/all-user').get(isLoggedIn, getAllUser);
+router.route('/single-user').get(isLoggedIn, singleUser);
+router.route('/logout').get(isLoggedIn, logout);
+router.route('/search').get(isLoggedIn, userSearch);
 
 // - Delete
-router.route('/delete-user').delete(deleteAccount);
+router.route('/delete-user').delete(isLoggedIn, deleteAccount);
 
 export default router;

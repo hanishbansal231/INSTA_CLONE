@@ -10,8 +10,8 @@ const sendEmail = async function (email, subject, message) {
         });
 
         const info = transporter.sendMail({
-            from: email,
-            to: "example@gmail.com",
+            from: process.env.SMTP_FROM_EMAIL,
+            to: `${email}`,
             subject: subject,
             html: `${message}`
         })
