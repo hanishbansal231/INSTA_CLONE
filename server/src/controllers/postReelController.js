@@ -1,11 +1,11 @@
-import postImageModel from '../models/postImageModel.js';
+import postReelModel from '../models/postReelModel.js';
 import usersModel from '../models/userModel.js';
 import apiError from '../utils/apiError.js';
 import apiResponse from '../utils/apiResponse.js';
 import asyncHandler from '../utils/asyncHandler.js';
 import uplodaImageCloudinary from '../utils/cloudinary.js';
 
-export const createPostImage = asyncHandler(async (req, res, next) => {
+export const createPostReel = asyncHandler(async (req, res, next) => {
     try {
         const { id } = req.user;
         const { description, tag } = req.body;
@@ -20,40 +20,38 @@ export const createPostImage = asyncHandler(async (req, res, next) => {
             return next(new apiError(403, 'User not found...'));
         }
 
-        const postImage = await postImageModel.create({
+        const postReel = await postReelModel.create({
             tag,
             description,
             user: id,
         });
 
 
-        if (req.files) {
+        if (req.file) {
             try {
-                const imagesFiles = req.files;
-                const results = await Promise.all(imagesFiles.images.map((image, idx) => uplodaImageCloudinary(image.path)));
-                // console.log(results);
+                const reelVedio = req.file;
 
-                postImage.images = postImage.images.concat(results.map((result) => ({
-                    public_id: result.public_id,
-                    secure_url: result.secure_url
-                })));
+                const res = await uplodaImageCloudinary(reelVedio.path);
 
-                await postImage.save();
+                postReel.reel.public_id = res.public_id;
+                postReel.reel.secure_url = res.secure_url;
+
+                await postReel.save();
 
             } catch (error) {
                 console.log(error);
-                return next(new apiError(402, 'Image upload Failed...'));
+                return next(new apiError(402, 'Reel upload Failed...'));
             }
         }
 
-        if (!postImage) {
+        if (!postReel) {
             return next(new apiError(403, 'Post not created please try again...'));
         }
 
-        await postImage.save();
+        await postReel.save();
 
         return res.status(201).json(
-            new apiResponse(200, postImage, 'Post Created Successfully')
+            new apiResponse(200, postReel, 'Post Created Successfully')
         )
 
 
@@ -63,12 +61,12 @@ export const createPostImage = asyncHandler(async (req, res, next) => {
     }
 });
 
-export const getAllImagePost = asyncHandler(async (req, res, next) => {
+export const getAllReelPost = asyncHandler(async (req, res, next) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
 
-        const allPosts = await postImageModel.find({}).skip((page - 1) * limit).limit(limit).sort({ createdAt: -1 });
+        const allPosts = await postReelModel.find({}).skip((page - 1) * limit).limit(limit).sort({ createdAt: -1 });
 
         if (allPosts.length === 0) {
             return next(new apiError(403, 'Post not found...'));
@@ -83,18 +81,18 @@ export const getAllImagePost = asyncHandler(async (req, res, next) => {
     }
 })
 
-export const getSingleImagePost = asyncHandler(async (req, res, next) => {
+export const getSingleReelPost = asyncHandler(async (req, res, next) => {
     try {
         const { id } = req.params;
 
-        const post = await postImageModel.findById({ _id: id });
+        const reel = await postReelModel.findById({ _id: id });
 
-        if (!post) {
+        if (!reel) {
             return next(new apiError(403, 'Post not found...'));
         }
 
         return res.status(201).json(
-            new apiResponse(200, post, 'Post find succcessfully...')
+            new apiResponse(200, reel, 'Post find succcessfully...')
         )
 
     } catch (error) {
@@ -102,7 +100,7 @@ export const getSingleImagePost = asyncHandler(async (req, res, next) => {
     }
 })
 
-export const deleteImagePost = asyncHandler(async (req, res, next) => {
+export const deleteReelPost = asyncHandler(async (req, res, next) => {
     try {
 
     } catch (error) {

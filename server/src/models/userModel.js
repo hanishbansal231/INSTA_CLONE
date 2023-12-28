@@ -92,7 +92,7 @@ userSchema.pre('save', async function (next) {
 
 userSchema.methods.comparePassword = async function (password) {
     try {
-        return await bcrypt.compare(password,this.password);
+        return await bcrypt.compare(password, this.password);
     } catch (error) {
         console.log(error);
     }
@@ -126,7 +126,7 @@ userSchema.methods.generateForgotPasswordToken = function () {
             .digest('hex');
 
         this.forgotPasswordExpiry = Date.now() + 15 * 60 * 1000;
-        
+
     } catch (error) {
         console.log(error);
     }
