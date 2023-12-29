@@ -131,6 +131,9 @@ const authSlice = createSlice({
             state.isLoggedIn = true;
             state.user = action?.payload?.data;
             state.role = action?.payload?.data?.role;
+            localStorage.setItem('isLoggedIn',true);
+            localStorage.setItem('user',JSON.stringify(action?.payload?.data));
+            localStorage.setItem('role',JSON.stringify(action?.payload?.data?.role));
         })
     }
 });

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { sendOtp, setUserDetails } from '../redux/slice/authSlice';
 
 function Register() {
@@ -50,84 +50,92 @@ function Register() {
 
     return (
         <>
-            <div className='flex items-center justify-center min-h-screen w-full'>
-                <form onSubmit={onFormSubmit} className='border w-[600px] p-5 mx-3 sm:mx-5 md:mx-0 rounded'>
+            <div className='flex items-center flex-col justify-center min-h-screen w-full'>
+                <form onSubmit={onFormSubmit} className='form'>
+                    <h2 className='font-mono text-center text-5xl mb-5'>Instagram</h2>
+                    <div className='w-full text-center'>
+                        <p className='font-semibold text-[#737373] mb-3'>Sign up to see photos and videos from your friends.</p>
+                        <p className='or w-full grid grid-cols-3 items-center'>OR</p>
+                    </div>
                     <div>
-                        <label htmlFor="firstName">First Name<sup className='text-pink-600'>*</sup></label>
+                        {/* <label htmlFor="firstName">First Name<sup className='text-pink-600'>*</sup></label> */}
                         <input
                             type='text'
                             value={userInfo.firstName}
                             name='firstName'
                             id='firstName'
                             placeholder='Enter Your First Name'
-                            className='border w-full p-3 my-2 rounded outline-0'
+                            className='input'
                             onChange={userInput}
                         />
                     </div>
                     <div>
-                        <label htmlFor="lastName">Last Name<sup className='text-pink-600'>*</sup></label>
+                        {/* <label htmlFor="lastName">Last Name<sup className='text-pink-600'>*</sup></label> */}
                         <input
                             type='text'
                             value={userInfo.lastName}
                             name='lastName'
                             id='lastName'
                             placeholder='Enter Your Last Name'
-                            className='border w-full p-3 my-2 rounded outline-0'
+                            className='input'
                             onChange={userInput}
                         />
                     </div>
                     <div>
-                        <label htmlFor="userName">username<sup className='text-pink-600'>*</sup></label>
+                        {/* <label htmlFor="userName">username<sup className='text-pink-600'>*</sup></label> */}
                         <input
                             type='text'
                             value={userInfo.userName}
                             name='userName'
                             id='userName'
                             placeholder='Enter Your Username'
-                            className='border w-full p-3 my-2 rounded outline-0'
+                            className='input'
                             onChange={userInput}
                         />
                     </div>
                     <div>
-                        <label htmlFor="email">Email<sup className='text-pink-600'>*</sup></label>
+                        {/* <label htmlFor="email">Email<sup className='text-pink-600'>*</sup></label> */}
                         <input
                             type='text'
                             value={userInfo.email}
                             name='email'
                             id='email'
                             placeholder='Enter Your Email'
-                            className='border w-full p-3 my-2 rounded outline-0'
+                            className='input'
                             onChange={userInput}
                         />
                     </div>
                     <div>
-                        <label htmlFor="phoneNumber">Phone Number<sup className='text-pink-600'>*</sup></label>
+                        {/* <label htmlFor="phoneNumber">Phone Number<sup className='text-pink-600'>*</sup></label> */}
                         <input
                             type='text'
                             value={userInfo.phoneNumber}
                             name='phoneNumber'
                             id='phoneNumber'
                             placeholder='Enter Your Phone Number'
-                            className='border w-full p-3 my-2 rounded outline-0'
+                            className='input'
                             onChange={userInput}
                         />
                     </div>
                     <div>
-                        <label htmlFor="password">Password<sup className='text-pink-600'>*</sup></label>
+                        {/* <label htmlFor="password">Password<sup className='text-pink-600'>*</sup></label> */}
                         <input
                             type='password'
                             value={userInfo.password}
                             name='password'
                             id='password'
                             placeholder='Enter Your Password'
-                            className='border w-full p-3 my-2 rounded outline-0'
+                            className='input'
                             onChange={userInput}
                         />
                     </div>
                     <div>
-                        <button type='submit'>Submit</button>
+                        <button className='button' type='submit'>Sign up</button>
                     </div>
                 </form>
+                <div className='border bg-white w-[350px] p-5 mx-3 mt-4 text-center sm:mx-5 md:mx-0 rounded'>
+                    <p>Have an account? <span className='text-[#4cb5f9]'><Link to={'/login'}>Log in</Link></span></p>
+                </div>
             </div>
         </>
     )

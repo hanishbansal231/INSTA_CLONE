@@ -47,33 +47,37 @@ function ResetPassword() {
   return (
     <>
       <div className='flex items-center justify-center min-h-screen w-full'>
-        <form onSubmit={onFormSubmit} className='border w-[600px] p-5 mx-3 sm:mx-5 md:mx-0 rounded'>
+        <form onSubmit={onFormSubmit} className='form'>
+          <div className='text-center'>
+            <h2 className='font-semibold'>Create A Strong Password</h2>
+            <p className='text-sm mt-3 mb-10 text-[#737373]'>Your password must be at least 6 characters and should include a combination of numbers, letters and special characters (!$@%).</p>
+          </div>
           <div>
-            <label htmlFor="password">Password<sup className='text-pink-600'>*</sup></label>
+            {/* <label htmlFor="password">Password<sup className='text-pink-600'>*</sup></label> */}
             <input
               type='password'
               value={userInfo.password}
               name='password'
               id='password'
               placeholder='Enter Your Password'
-              className='border w-full p-3 my-2 rounded outline-0'
+              className='input'
               onChange={userInput}
             />
           </div>
           <div>
-            <label htmlFor="comfirmPassword">Comfirm Password<sup className='text-pink-600'>*</sup></label>
+            {/* <label htmlFor="comfirmPassword">Comfirm Password<sup className='text-pink-600'>*</sup></label> */}
             <input
               type='password'
               value={userInfo.comfirmPassword}
               name='comfirmPassword'
               id='comfirmPassword'
               placeholder='Enter Your Comfirm Password'
-              className='border w-full p-3 my-2 rounded outline-0'
+              className='input'
               onChange={userInput}
             />
           </div>
           <div>
-            <button type='submit'>Submit</button>
+            <button className='button' type='submit'>Reset Password</button>
           </div>
         </form>
       </div>

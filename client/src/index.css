@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.input {
+    @apply border w-full p-2 my-2 rounded outline-0 placeholder:text-sm
+}
+
+.button {
+    @apply border w-full p-1 bg-[#4cb5f9] text-white my-2 rounded outline-0 placeholder:text-sm
+}
+
+.or::before, .or::after {
+    content: ' ';
+    height: 1px;
+    display: block;
+    background: #ebecec;
+}
+
+.form{
+    @apply border bg-white w-[350px] p-3 mx-3 sm:mx-5 md:mx-0
+}

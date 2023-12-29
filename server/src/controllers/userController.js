@@ -106,15 +106,24 @@ export const registerUser = asyncHandler(async (req, res, next) => {
 export const login = asyncHandler(async (req, res, next) => {
     try {
 
-        const { email, userName, password } = req.body;
+        const { value, password } = req.body;
 
-        if (!email, !userName, !password) {
+        if (!password) {
             return next(new apiError(400, "Please fill all information"));
         }
 
-        const user = await usersModel.findOne({
-            $or: [{ userName }, { email }]
-        })
+        let user;
+
+        if (validateEmail(value)) {
+            user = await usersModel.findOne({ email: value })
+        } else {
+            user = await usersModel.findOne({ userName: value });
+        }
+
+
+        // const user = await usersModel.findOne({
+        //     $or: [{ userName }, { email }]
+        // })
 
         if (!user) {
             return next(new apiError(403, 'User not exists,Please register this account...'));
