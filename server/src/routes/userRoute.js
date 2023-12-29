@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { changePassword, deleteAccount, forgotPasswordToken, getAllUser, login, logout, profileUpdate, registerUser, sendOtp, singleUser, userSearch } from '../controllers/userController.js';
+import { changePassword, deleteAccount, forgotPassword, forgotPasswordToken, getAllUser, login, logout, profileUpdate, registerUser, sendOtp, singleUser, userSearch } from '../controllers/userController.js';
 import { isLoggedIn } from '../middlewares/auth.middleware.js';
 
 const router = Router();
@@ -9,6 +9,7 @@ router.route('/send-otp').post(sendOtp);
 router.route('/register').post(registerUser);
 router.route('/login').post(login);
 router.route('/forgot-password-token').post(forgotPasswordToken);
+router.route('/reset-password').post(forgotPassword);
 
 // - Put
 router.route('/update').put(isLoggedIn, profileUpdate);

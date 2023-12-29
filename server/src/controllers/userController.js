@@ -5,6 +5,12 @@ import otpModel from '../models/otpModel.js';
 import otpGenerator from 'otp-generator';
 import sendEmail from "../utils/sendEmail.js";
 import apiResponse from "../utils/apiResponse.js";
+import crypto from 'crypto';
+
+function validateEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
 
 export const sendOtp = asyncHandler(async (req, res, next) => {
     try {
@@ -313,26 +319,37 @@ export const changePassword = asyncHandler(async (req, res, next) => {
 
 export const forgotPasswordToken = asyncHandler(async (req, res, next) => {
     try {
-        const { email, userName } = req.body;
+        const { value } = req.body;
 
-        if (!email || !userName) {
-            return next(new apiError(400, "Please fill all information"))
+        // if (!email || !userName) {
+        //     return next(new apiError(400, "Please fill all information"))
+        // }
+
+        // const user = await usersModel.findOne({
+        //     $or: [{ email: value, userName: value }]
+        // });
+
+        let user;
+
+        if (validateEmail(value)) {
+            user = await usersModel.findOne({ email: value })
+        } else {
+            user = await usersModel.findOne({ userName: value });
         }
-
-        const user = await usersModel.findOne({
-            $or: [{ email, userName }]
-        });
 
         if (!user) {
             return next(new apiError(403, 'User is not found Please try to register this account'))
         }
 
         const randomUrl = await user.generateForgotPasswordToken();
+        // console.log(randomUrl);
 
         const url = `http://localhost:3000/forgot-password/${randomUrl}`
 
         try {
-            const res = sendEmail(user.email, 'Send Forgot password link', url);
+            const result = await sendEmail(user.email, 'Send Forgot password link', url);
+
+            await user.save();
 
             return res.status(201).json(
                 new apiResponse(200, {}, 'Email send succcessfully...')
@@ -348,7 +365,57 @@ export const forgotPasswordToken = asyncHandler(async (req, res, next) => {
 
 
     } catch (error) {
+        user.forgotPasswordExpiry = undefined
+        user.forgotPasswordToken = undefined
+        await user.save();
         console.log(error);
         return next(new apiError(500, error.message));
     }
 });
+
+export const forgotPassword = asyncHandler(async (req, res, next) => {
+    try {
+        const { password, comfirmPassword, resetToken } = req.body;
+
+        console.log(req.body);
+
+        if (!password || !comfirmPassword || !resetToken) {
+            return next(new apiError(400, "Please fill all information"))
+        }
+
+        if (password !== comfirmPassword) {
+            return next(new apiError(403, 'Password is not mached please fill again'))
+        }
+
+        const forgotPasswordToken = crypto
+            .createHash('sha256')
+            .update(resetToken)
+            .digest('hex');
+
+        if (!forgotPasswordToken) {
+            return next(new apiError(401, "Token is not hashed"))
+        }
+
+        const user = await usersModel.findOne({
+            forgotPasswordToken,
+            forgotPasswordExpiry: { $gt: Date.now() }
+        })
+
+        if (!user) {
+            return next(new apiError(403, "User is not found please try again..."))
+        }
+
+        user.password = password;
+        user.forgotPasswordExpiry = undefined;
+        user.forgotPasswordToken = undefined;
+        await user.save();
+
+        return res.status(201).json(
+            new apiResponse(200, {}, 'Password reset successfully...')
+        )
+
+    } catch (error) {
+        console.log(error);
+        return next(new apiError(500, error.message));
+    }
+})

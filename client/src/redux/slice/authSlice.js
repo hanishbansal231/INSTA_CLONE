@@ -82,6 +82,42 @@ export const singleUser = createAsyncThunk('/user/single-user', async () => {
     }
 })
 
+export const forgotPassword = createAsyncThunk('/user/forgot-password', async (data) => {
+    try {
+        const res = axiosInstance.post('user/forgot-password-token', { value: data });
+
+        toast.promise(res, {
+            loading: 'Loading...',
+            success: (data) => {
+                return data?.data?.message
+            },
+            error: 'Forgot Password Failed'
+        });
+
+        return (await res)?.data;
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+export const resetPassword = createAsyncThunk('/user/forgot-password', async (data) => {
+    try {
+        const res = axiosInstance.post('user/reset-password', data);
+
+        toast.promise(res, {
+            loading: 'Loading...',
+            success: (data) => {
+                return data?.data?.message
+            },
+            error: 'Forgot Password Failed'
+        });
+
+        return (await res)?.data;
+    } catch (error) {
+        console.log(error);
+    }
+})
+
 const authSlice = createSlice({
     name: 'auth',
     initialState,

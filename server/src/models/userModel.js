@@ -121,11 +121,12 @@ userSchema.methods.generateForgotPasswordToken = function () {
         const randomUrl = crypto.randomBytes(20).toString('hex');
 
         this.forgotPasswordToken = crypto
-            .createHash('sha255')
+            .createHash('sha256')
             .update(randomUrl)
-            .digest('hex');
+            .digest('hex')
 
         this.forgotPasswordExpiry = Date.now() + 15 * 60 * 1000;
+        return randomUrl;
 
     } catch (error) {
         console.log(error);
