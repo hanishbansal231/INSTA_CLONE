@@ -6,13 +6,14 @@ import VerifyEmail from "./pages/VerifyEmail";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import RequireAuth from "./components/auth/RequireAuth";
 
 function App() {
 
   return (
     <>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<RequireAuth><Home /></RequireAuth>} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/email-verify" element={<VerifyEmail />} />

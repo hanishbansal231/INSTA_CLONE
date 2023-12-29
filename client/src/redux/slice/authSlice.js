@@ -127,7 +127,11 @@ const authSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-
+        builder.addCase(loginAccount.fulfilled, (state, action) => {
+            state.isLoggedIn = true;
+            state.user = action?.payload?.data;
+            state.role = action?.payload?.data?.role;
+        })
     }
 });
 
