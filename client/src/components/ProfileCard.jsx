@@ -1,6 +1,19 @@
-import React from 'react'
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { singleUser } from '../redux/slice/authSlice';
 
 export default function ProfileCard() {
+    const dispatch = useDispatch();
+    const { userData } = useSelector((state) => state?.auth);
+    console.log(userData);
+    async function fetchedData() {
+        const res = await dispatch(singleUser());
+        console.log(res);
+    }
+
+    useEffect(() => {
+        fetchedData()
+    }, [])
     return (
         <div className='ProfileCard rounded-md flex flex-col relative gap-1 overflow-x-clip shadow'>
             <div className='ProfileImages relative flex flex-col items-center justify-center'>
@@ -8,7 +21,7 @@ export default function ProfileCard() {
                 <img className='w-[6rem] rounded-full absolute bottom-[-3rem] shadow' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE26NjQaonqTRt7BXD_87Iuukitk_kcGBv3w&usqp=CAU" alt="" />
             </div>
             <div className='ProfileName flex flex-col items-center mt-7 gap-3 p-3'>
-                <span className=' font-bold'>Elon Musk</span>
+                <span className=' font-bold'>{userData?.firstName}{" "}{userData?.lastName}</span>
                 <span>Elon Reeve Musk is a businessman and investor. He is the founder, chairman, CEO</span>
             </div>
             <div className='followStatus flex flex-col items-center justify-center gap-2'>
